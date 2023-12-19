@@ -1,4 +1,5 @@
 import exifread
+from PIL import Image, ImageTk
 import tkinter as tk
 from tkinter import filedialog
 from tkinter import scrolledtext
@@ -29,6 +30,14 @@ def browse_image():
     if file_path:
         entry_path.delete(0, tk.END)
         entry_path.insert(0, file_path)
+        update_image_preview(file_path)
+
+def update_image_preview(image_path):
+    image = Image.open(image_path)
+    image.thumbnail((400, 400))
+    photo = ImageTk.PhotoImage(image)
+    label_preview.config(image=photo)
+    label_preview.image = photo
 
 def extract_metadata_from_gui():
     image_path = entry_path.get()
@@ -59,19 +68,25 @@ entry_path.grid(row=0, column=1, pady=10, padx=10)
 button_browse = tk.Button(app, text="Обзор", command=browse_image)
 button_browse.grid(row=0, column=2, pady=10, padx=10)
 
+label_caption = tk.Label(app, text="Предпросмотр:")
+label_caption.grid(row=1, column=0, columnspan=3, pady=1)
+
 button_extract = tk.Button(app, text="Извлечь метаданные", command=extract_metadata_from_gui)
-button_extract.grid(row=1, column=0, columnspan=3, pady=10)
+button_extract.grid(row=3, column=0, columnspan=3, pady=10)
 
 button_save = tk.Button(app, text="Сохранить", command=lambda: save_metadata_to_file(result_text.get(1.0, tk.END).strip()), state=tk.DISABLED)
-button_save.grid(row=3, column=2, pady=2, padx=10)
+button_save.grid(row=5, column=2, pady=2, padx=10)
 
 button_exit = tk.Button(app, text="Выход", command=app.quit)
-button_exit.grid(row=4, column=2, pady=2, padx=10)
+button_exit.grid(row=6, column=2, pady=2, padx=10)
 
 # Create text widget for displaying metadata
 result_text = scrolledtext.ScrolledText(app, wrap=tk.WORD, width=60, height=20)
-result_text.grid(row=2, column=0, columnspan=3, pady=10, padx=10)
+result_text.grid(row=4, column=0, columnspan=3, pady=10, padx=10)
 result_text.config(state=tk.DISABLED)
 
+# Add image preview
+label_preview = tk.Label(app)
+label_preview.grid(row=2, column=0, columnspan=3, pady=5)
 
 app.mainloop()

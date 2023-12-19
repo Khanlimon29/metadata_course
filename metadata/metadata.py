@@ -7,6 +7,9 @@ def extract_metadata(image):
     try:
         with open(image, 'rb') as f:
             tags = exifread.process_file(f)
+            if not tags:
+                return "Ошибка: Нет доступных метаданных."
+            
             metadata = ""
             for tag, value in tags.items():
                 if tag not in ('JPEGThumbnail', 'TIFFThumbnail'):
@@ -14,6 +17,7 @@ def extract_metadata(image):
             return metadata
     except Exception as e:
         return f"Ошибка: {str(e)}"
+
 
 def browse_image():
     file_path = filedialog.askopenfilename(title="Выберите фотографию", filetypes=[("Image files", "*.jpg;*.jpeg;*.CR2;*.gif;*.bmp;*.tiff")])

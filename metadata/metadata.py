@@ -25,7 +25,7 @@ def save_metadata_to_file(metadata):
     if file_path:
         with open(file_path, 'w') as file:
             file.write(metadata)
-
+            
 def browse_image():
     file_path = filedialog.askopenfilename(title="Выберите фотографию", filetypes=[("Image files", "*.jpg;*.jpeg;*.CR2;*.gif;*.bmp;*.tiff")])
     if file_path:
@@ -107,19 +107,65 @@ label_preview = tk.Label(main_frame)
 label_preview.grid(row=2, column=0, columnspan=3, pady=5)
 
 # Help widgets
-text_help = "Помощь"
-label_caption = tk.Label(help_frame, text=text_help)
-label_caption.grid(row=1, column=0, columnspan=3, pady=1)
+text_help = """1. Для выбора фотографии нажмите на кнопку "Обзор"
+2. Выберите фотографию с помощью браузера файлов, обратите внимание что программа даёт возможность выбора только поддерживаемых форматов (.jpg .jpeg .CR2 .gif .bmp .tiff)
+3. Выбранное изображение должно появиться в предпросмотре
+4. Нажмите на кнопку "Извлечь метаданные"
+5. После вывода всех данных вы можете сохранить их в текстовом формате, для этого нажмите на кнопку "Сохранить"
+6. Напишите название для нового файла и выберите директорию для сохранения файла
+7. Выйти из программы с помощью кнопки "Выход" """
+text_help_widget = tk.Text(help_frame, wrap=tk.WORD, width=65, height=30)
+text_help_widget.grid(row=2, column=0, columnspan=3, pady=10, padx=10)
+text_help_widget.insert(tk.END, text_help)
+
+# Add scrolling
+scroll_help = tk.Scrollbar(help_frame, command=text_help_widget.yview)
+scroll_help.grid(row=2, column=3, sticky='ns')
+text_help_widget.config(yscrollcommand=scroll_help.set, state=tk.DISABLED)
 
 # About programm widgets
-text_about = "О программе"
-label_caption = tk.Label(about_frame, text=text_about)
-label_caption.grid(row=1, column=0, columnspan=3, pady=1)
+text_about = """Программа "Metadata Extractor" была написана в рамках курсовой работы по предмету "Инструментальные средства разработки программного обеспечения с открытым исходным кодом". 
+Она представляет собой инструмент для извлечения метаданных из изображений в формате JPEG, TIFF, CR2, GIF, BMP и других. 
+Программа разработана на языке программирования Python с использованием библиотеки Tkinter для графического интерфейса пользователя (GUI) и библиотеки Pillow для работы с изображениями.
+
+На главной вкладке пользователь может выполнить следующие действия:
+Выбор изображения: Пользователь может выбрать фотографию с помощью кнопки "Обзор", что открывает диалоговое окно выбора файла.
+Просмотр пути к файлу: Вводится путь к выбранному изображению.
+Предпросмотр изображения: Программа отображает предпросмотр выбранного изображения в небольшом окне.
+Извлечение метаданных: По нажатию кнопки "Извлечь метаданные" изображаются метаданные из EXIF-информации файла.
+Сохранение метаданных: Пользователь может сохранить извлеченные метаданные в текстовый файл с помощью кнопки "Сохранить". Кнопка "Сохранить" неактивна, если метаданные отсутствуют.
+Дополнительные вкладки
+Помощь: Вкладка "Помощь" предоставляет текстовую информацию для пользователя.
+О программе: Вкладка "О программе" содержит общую информацию о программе.
+О разработчике: Вкладка "О разработчике" предоставляет информацию о разработчике программы.
+
+Программа поддерживает отображение изображения в предпросмотре и извлечение метаданных при выборе изображения и по фокусу на поле ввода пути.
+Интерфейс программы реализован с использованием библиотеки Tkinter, что обеспечивает кросс-платформенность.
+Изображение предварительного просмотра отображается с использованием библиотеки Pillow (PIL).
+Извлечение метаданных осуществляется с использованием библиотеки exifread.
+Программа предоставляет возможность сохранения извлеченных метаданных в текстовый файл.
+Эта программа может быть полезной для пользователей, которым требуется быстро и удобно извлекать метаданные из фотографий с минимальными усилиями."""
+
+text_about_widget = tk.Text(about_frame, wrap=tk.WORD, width=65, height=30)
+text_about_widget.grid(row=2, column=0, columnspan=3, pady=10, padx=10)
+text_about_widget.insert(tk.END, text_about)
+
+# Add scrolling
+scroll_about = tk.Scrollbar(about_frame, command=text_about_widget.yview)
+scroll_about.grid(row=2, column=3, sticky='ns')
+text_about_widget.config(yscrollcommand=scroll_about.set, state=tk.DISABLED)
 
 # About dev widgets
-text_dev = "О разработчике"
-label_caption = tk.Label(dev_frame, text=text_dev)
-label_caption.grid(row=1, column=0, columnspan=3, pady=1)
+text_dev = """За разработкой данной программы стоит студент МИРЭА из группы ИКБО-34-22 Ахметов Алихан.
+В публикациях ипользуется псевдоним Khanlimon"""
+text_dev_widget = tk.Text(dev_frame, wrap=tk.WORD, width=65, height=30)
+text_dev_widget.grid(row=2, column=0, columnspan=3, pady=10, padx=10)
+text_dev_widget.insert(tk.END, text_dev)
+
+# Add scrolling
+scroll_dev = tk.Scrollbar(dev_frame, command=text_dev_widget.yview)
+scroll_dev.grid(row=2, column=3, sticky='ns')
+text_dev_widget.config(yscrollcommand=scroll_dev.set, state=tk.DISABLED)
 
 # Image update
 entry_path.bind("<FocusOut>", lambda event: update_image_preview(entry_path.get()))

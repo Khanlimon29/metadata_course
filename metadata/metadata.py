@@ -121,7 +121,7 @@ text_dev = "О разработчике"
 label_caption = tk.Label(dev_frame, text=text_dev)
 label_caption.grid(row=1, column=0, columnspan=3, pady=1)
 
-# Обновляем изображение при выборе нового файла
+# Image update
 entry_path.bind("<FocusOut>", lambda event: update_image_preview(entry_path.get()))
 
 app.mainloop()
